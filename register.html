@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Register – Create PG Fintrack Account</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Create your PG Fintrack account to start sharing group expenses with your roommates.">
+  <meta name="keywords" content="PG expense sharing, roommate expense tracker, shared expense app, PG group expenses">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta property="og:title" content="PG Fintrack – Register">
+  <meta property="og:description" content="Register a new PG Fintrack account and start tracking group expenses.">
+  <meta property="og:image" content="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <meta property="og:type" content="website">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { min-height: 100vh; background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%); color-scheme: light dark; }
+    .dark body { background: linear-gradient(180deg, #030712 0%, #08101f 100%); }
+    * { transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+    .input-card { background: rgba(255,255,255,0.94); backdrop-filter: blur(18px); border: 1px solid rgba(148,163,184,0.35); }
+    .dark .input-card { background: rgba(15,23,42,0.95); border-color: rgba(71,85,105,0.75); }
+  </style>
+</head>
+<body class="flex min-h-screen items-center justify-center px-4 py-10 text-slate-900 dark:text-slate-100">
+  <div class="w-full max-w-xl">
+    <div class="input-card rounded-[32px] border shadow-xl p-8 sm:p-10">
+      <div class="text-center mb-8">
+        <div class="mx-auto mb-4 h-14 w-14 rounded-full bg-indigo-500 flex items-center justify-center text-white text-2xl font-bold">+</div>
+        <p class="text-xs uppercase tracking-[0.32em] text-indigo-600">Create account</p>
+        <h1 class="mt-4 text-3xl font-bold text-slate-900 dark:text-white">Register for PG Fintrack</h1>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Create your account to start managing shared PG expenses and inviting roommates.</p>
+      </div>
+
+      <div id="errorMessage" class="hidden mb-4 rounded-3xl border border-rose-200 bg-rose-50 text-sm text-rose-700 px-4 py-3"></div>
+
+      <form id="registerForm" class="space-y-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
+          <input id="registerName" type="text" placeholder="Sanjay Kumar" class="w-full rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email</label>
+          <input id="registerEmail" type="email" placeholder="name@example.com" class="w-full rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Mobile</label>
+          <input id="registerMobile" type="tel" placeholder="9876543210" class="w-full rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none" required>
+        </div>
+        <div class="relative">
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Password</label>
+          <input id="registerPassword" type="password" placeholder="Create password" class="w-full rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 pr-14 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none" required>
+          <button type="button" id="toggleRegisterPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 dark:hover:text-white" aria-label="Toggle password visibility">Show</button>
+        </div>
+        <button type="submit" class="w-full rounded-3xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 transition">Create Account</button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        Already registered? <a href="login.html" class="font-semibold text-indigo-600 hover:text-indigo-700">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FIREBASE_URL = 'https://pg-fintrack-website-default-rtdb.firebaseio.com';
+    const STORAGE_KEY = 'pgfUser';
+
+    const showError = (message) => {
+      const el = document.getElementById('errorMessage');
+      if (!message) {
+        el.classList.add('hidden');
+        el.textContent = '';
+      } else {
+        el.textContent = message;
+        el.classList.remove('hidden');
+      }
+    };
+
+    const normalizeMobile = (value) => value.replace(/\D/g, '');
+    const normalizeUserId = (value) => value.trim().toLowerCase().replace(/[@.#$\[\]\/]/g, '_');
+    const saveUser = (user) => localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+
+    const fetchUsers = async () => {
+      const response = await fetch(`${FIREBASE_URL}/users.json`);
+      if (!response.ok) throw new Error('Unable to read user database.');
+      return await response.json();
+    };
+
+    const createUser = async (userId, data) => {
+      const response = await fetch(`${FIREBASE_URL}/users/${encodeURIComponent(userId)}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) throw new Error('Unable to save user.');
+      return await response.json();
+    };
+
+    const handleRegister = async (event) => {
+      event.preventDefault();
+      showError('');
+
+      const name = document.getElementById('registerName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+      const mobile = normalizeMobile(document.getElementById('registerMobile').value);
+      const password = document.getElementById('registerPassword').value;
+
+      if (!name || !email || !mobile || !password) {
+        showError('Please fill in all fields.');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      if (!/^\d{10}$/.test(mobile)) {
+        showError('Mobile number must be 10 digits.');
+        return;
+      }
+
+      try {
+        const users = await fetchUsers();
+        if (users) {
+          for (const uid in users) {
+            const user = users[uid];
+            if (user.email === email) {
+              showError('An account with this email already exists.');
+              return;
+            }
+            if (user.mobile === mobile) {
+              showError('An account with this mobile number already exists.');
+              return;
+            }
+          }
+        }
+
+        const uid = Math.random().toString(36).substring(2, 10);
+        const newUser = { uid, name, email, mobile, password };
+        await createUser(uid, newUser);
+        saveUser(newUser);
+        window.location.href = 'group-select.html';
+      } catch (error) {
+        showError(error.message);
+      }
+    };
+
+    document.getElementById('registerForm').addEventListener('submit', handleRegister);
+
+    document.getElementById('toggleRegisterPassword').addEventListener('click', () => {
+      const pass = document.getElementById('registerPassword');
+      if (!pass) return;
+      pass.type = pass.type === 'password' ? 'text' : 'password';
+    });
+
+    const init = () => {
+      const existing = localStorage.getItem(STORAGE_KEY);
+      if (existing) {
+        window.location.href = 'group-select.html';
+      }
+    };
+
+    init();
+  </script>
+</body>
+</html>
+

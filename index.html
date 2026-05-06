@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PG Fintrack | Smart Group Expense Sharing</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="PG Fintrack helps you and your roommates share expenses, split bills equally, and manage group finances effortlessly.">
+  <meta name="keywords" content="PG expense sharing, roommate expense splitter, group expense tracker, shared bills">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta property="og:title" content="PG Fintrack � Smart Group Expense Sharing">
+  <meta property="og:description" content="Manage shared expenses with your roommates instantly">
+  <meta property="og:image" content="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PG Fintrack",
+    "applicationCategory": "FinanceApplication",
+    "url": "http://pgfintrack.com/index.html"
+  }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { min-height: 100vh; background: #ffffff; color-scheme: light dark; }
+    .dark body { background: #070a14; }
+    .glass-card { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px); border: 1px solid rgba(148, 163, 184, 0.24); box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .glass-card:hover { transform: translateY(-1px); box-shadow: 0 22px 55px rgba(15, 23, 42, 0.1); }
+    .dark .glass-card { background: rgba(15, 23, 42, 0.88); border-color: rgba(71, 85, 105, 0.6); box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32); }
+    .button-soft { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .button-soft:active { transform: scale(0.98); }
+    .fade-in { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .split-item { transition: background-color 0.2s ease, transform 0.2s ease; }
+    .split-item:hover { transform: translateY(-2px); }
+    #cookieBanner { transform: translateY(18px); opacity: 0; transition: transform 0.28s ease, opacity 0.28s ease; }
+    #cookieBanner.show-banner { transform: translateY(0); opacity: 1; }
+    .expense-item { animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+  </style>
+</head>
+<body class="font-sans text-slate-900 dark:text-slate-100">
+  <div class="w-full lg:max-w-[1200px] bg-white dark:bg-gray-900 min-h-[100dvh] sm:min-h-[850px] sm:rounded-[2.5rem] sm:shadow-2xl overflow-hidden relative flex flex-col mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-lg">?</div>
+          <div>
+            <h1 class="text-lg font-bold text-slate-900 dark:text-white">PG Fintrack</h1>
+            <p id="groupNameDisplay" class="text-xs text-slate-500 dark:text-slate-400">Loading...</p>
+            <p id="groupIdDisplay" class="text-xs text-slate-500 dark:text-slate-400">Group ID: -</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <svg id="sunIcon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.536l1.414 1.414a1 1 0 001.414-1.414l-1.414-1.414a1 1 0 00-1.414 1.414zm2.828-2.828l1.414-1.414a1 1 0 00-1.414-1.414l-1.414 1.414a1 1 0 001.414 1.414zM13 11a1 1 0 110 2h-2a1 1 0 110-2h2zm1.464-1.464a1 1 0 001.414-1.414l-1.414-1.414a1 1 0 10-1.414 1.414l1.414 1.414z" clip-rule="evenodd" /></svg>
+            <svg id="moonIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          </button>
+          <button id="deleteGroupBtn" class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-sm font-medium hover:bg-rose-200 dark:hover:bg-rose-900/50 transition hidden">Delete Group</button>
+          <button id="logoutBtn" class="px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="flex-1 overflow-y-auto py-6 space-y-6 hidden">
+      <!-- Group Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="glass-card rounded-2xl p-5">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Members</p>
+          <p id="totalMembers" class="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-2">0</p>
+        </div>
+        <div class="glass-card rounded-2xl p-5">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Expenses</p>
+          <p id="totalExpense" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">₹0</p>
+        </div>
+        <div class="glass-card rounded-2xl p-5">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Per Person Share</p>
+          <p id="perPersonShare" class="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">₹0</p>
+        </div>
+        <div class="glass-card rounded-2xl p-5">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Your Balance</p>
+          <p id="yourBalance" class="text-3xl font-bold text-orange-600 dark:text-orange-400 mt-2">₹0</p>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">Notifications</h2>
+          <button id="viewAllNotificationsBtn" class="text-xs text-indigo-600 dark:text-indigo-300 hover:underline">View all history</button>
+        </div>
+        <div id="groupNotificationsList" class="space-y-3">
+          <p class="text-slate-500 dark:text-slate-400 text-sm">Loading notifications...</p>
+        </div>
+      </div>
+
+      <!-- Add Expense Form -->
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Add Expense</h2>
+        <form id="expenseForm" class="space-y-4">
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Amount (₹)</label>
+            <input id="expenseAmount" type="number" placeholder="Enter amount" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Description</label>
+            <input id="expenseDescription" type="text" placeholder="e.g., Groceries, Coffee..." class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+          </div>
+          <button type="submit" class="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Add Expense</button>
+        </form>
+      </div>
+
+      <!-- Members Section -->
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Members</h2>
+        <div id="membersList" class="space-y-3">
+          <p class="text-slate-500 dark:text-slate-400 text-sm">Loading members...</p>
+        </div>
+      </div>
+
+      <!-- Split Summary Section -->
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Settlement Summary</h2>
+        <div id="splitSummary" class="space-y-3">
+          <p class="text-slate-500 dark:text-slate-400 text-sm">Loading settlements...</p>
+        </div>
+      </div>
+
+      <!-- Expenses List -->
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Recent Expenses</h2>
+        <div id="expensesList" class="space-y-3">
+          <p class="text-slate-500 dark:text-slate-400 text-sm">No expenses yet</p>
+        </div>
+      </div>
+
+      <!-- Settings & Actions -->
+      <div id="inviteSection" class="glass-card rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Invite a Member</h2>
+        <form id="inviteMemberForm" class="space-y-4">
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Email or Mobile</label>
+            <input id="inviteMemberInput" type="text" placeholder="Enter email or mobile" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+          </div>
+          <button type="submit" class="w-full px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition button-soft">Invite Member</button>
+        </form>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Group Actions</h2>
+        <div class="space-y-2">
+          <button id="switchGroupBtn" class="w-full px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-semibold rounded-xl transition button-soft">Switch Group</button>
+          <button id="settingsBtn" class="w-full px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-semibold rounded-xl transition button-soft">Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Section -->
+    <div id="authSection" class="flex-1 flex items-center justify-center py-8">
+      <div class="w-full max-w-md">
+        <div class="glass-card rounded-[32px] p-8 space-y-5 fade-in">
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-4xl mx-auto mb-4">?</div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">PG Fintrack</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Smart Group Expense Sharing</p>
+          </div>
+
+          <div class="flex gap-2">
+            <button id="loginTabBtn" class="flex-1 px-4 py-2 bg-indigo-500 text-white font-semibold rounded-xl transition">Login</button>
+            <button id="registerTabBtn" class="flex-1 px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-semibold rounded-xl hover:bg-slate-300 dark:hover:bg-slate-600 transition">Register</button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="loginForm" class="space-y-3 hidden">
+            <div>
+              <input id="loginEmailPhone" type="text" placeholder="Email or Mobile" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <div>
+              <input id="loginPassword" type="password" placeholder="Password" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Login</button>
+          </form>
+
+          <!-- Register Form -->
+          <form id="registerForm" class="space-y-3">
+            <div>
+              <input id="registerName" type="text" placeholder="Full Name" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <div>
+              <input id="registerEmail" type="email" placeholder="Email" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <div>
+              <input id="registerMobile" type="tel" placeholder="Mobile (10 digits)" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <div>
+              <input id="registerPassword" type="password" placeholder="Password" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Create Account</button>
+          </form>
+
+          <p class="text-center text-xs text-slate-500 dark:text-slate-400">
+            By continuing, you agree to our
+            <a href="terms.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Terms</a> and
+            <a href="privacy.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Privacy Policy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Banner -->
+  <div id="cookieBanner" class="fixed bottom-5 left-4 right-4 max-w-4xl mx-auto rounded-3xl border border-slate-200/80 bg-white/95 shadow-2xl p-5 backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-950/95 hidden">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex-1">
+        <p class="text-sm font-semibold text-slate-900 dark:text-white">We use cookies</p>
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">We use cookies to improve your experience. By using PG Fintrack, you consent to our cookie policy.</p>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <button id="cookieAccept" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold rounded-lg transition">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FIREBASE_URL = 'https://pg-fintrack-website-default-rtdb.firebaseio.com';
+    let currentUser = null;
+    let currentGroup = null;
+
+    // Initialize theme
+    const initTheme = () => {
+      const isDark = localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) document.documentElement.classList.add('dark');
+    };
+    initTheme();
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('sunIcon').classList.toggle('hidden');
+      document.getElementById('moonIcon').classList.toggle('hidden');
+    });
+
+    // Update sun/moon icon
+    const updateThemeIcon = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.getElementById('sunIcon').classList.toggle('hidden', !isDark);
+      document.getElementById('moonIcon').classList.toggle('hidden', isDark);
+    };
+    updateThemeIcon();
+
+    // Cookie Banner
+    const showCookieBanner = () => {
+      if (!localStorage.getItem('cookieConsent')) {
+        setTimeout(() => document.getElementById('cookieBanner').classList.add('show-banner'), 1000);
+      }
+    };
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'true');
+      document.getElementById('cookieBanner').classList.remove('show-banner');
+    });
+
+    // Auth Functions
+    const saveUser = (uid, email, name, mobile) => {
+      const user = { uid, email, name, mobile };
+      localStorage.setItem('pgfUser', JSON.stringify(user));
+      currentUser = user;
+    };
+
+    const loadUser = () => {
+      const user = localStorage.getItem('pgfUser');
+      if (user) currentUser = JSON.parse(user);
+      return currentUser;
+    };
+
+    const logout = () => {
+      localStorage.removeItem('pgfUser');
+      localStorage.removeItem('currentGroup');
+      currentUser = null;
+      currentGroup = null;
+      showAuthSection();
+    };
+
+    // Show/Hide Sections
+    const showAuthSection = () => {
+      document.getElementById('authSection').classList.remove('hidden');
+      document.getElementById('mainContent').classList.add('hidden');
+    };
+
+    const showMainContent = () => {
+      document.getElementById('authSection').classList.add('hidden');
+      document.getElementById('mainContent').classList.remove('hidden');
+    };
+
+    // Tab switching
+    document.getElementById('loginTabBtn').addEventListener('click', () => {
+      document.getElementById('loginForm').classList.remove('hidden');
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('loginTabBtn').classList.add('bg-indigo-500', 'text-white');
+      document.getElementById('loginTabBtn').classList.remove('bg-slate-200', 'dark:bg-slate-700');
+      document.getElementById('registerTabBtn').classList.remove('bg-indigo-500', 'text-white');
+      document.getElementById('registerTabBtn').classList.add('bg-slate-200', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white');
+    });
+
+    document.getElementById('registerTabBtn').addEventListener('click', () => {
+      document.getElementById('registerForm').classList.remove('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('registerTabBtn').classList.add('bg-indigo-500', 'text-white');
+      document.getElementById('registerTabBtn').classList.remove('bg-slate-200', 'dark:bg-slate-700');
+      document.getElementById('loginTabBtn').classList.remove('bg-indigo-500', 'text-white');
+      document.getElementById('loginTabBtn').classList.add('bg-slate-200', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white');
+    });
+
+    // Generate simple ID
+    const generateId = () => Math.random().toString(36).substr(2, 9);
+
+    // Register
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('registerName').value;
+      const email = document.getElementById('registerEmail').value;
+      const mobile = document.getElementById('registerMobile').value;
+      const password = document.getElementById('registerPassword').value;
+
+      if (mobile.length !== 10 || !/^\d+$/.test(mobile)) {
+        alert('Mobile number must be 10 digits');
+        return;
+      }
+
+      const uid = generateId();
+      const userData = { uid, name, email, mobile, password };
+      
+      try {
+        const response = await fetch(`${FIREBASE_URL}/users/${uid}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(userData)
+        });
+        if (response.ok) {
+          saveUser(uid, email, name, mobile);
+          window.location.href = 'group-select.html';
+        } else {
+          alert('Registration failed');
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    });
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailPhone = document.getElementById('loginEmailPhone').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/users.json`);
+        const users = await response.json();
+        
+        let foundUser = null;
+        for (const uid in users) {
+          const user = users[uid];
+          if ((user.email === emailPhone || user.mobile === emailPhone) && user.password === password) {
+            foundUser = user;
+            break;
+          }
+        }
+
+        if (foundUser) {
+          saveUser(foundUser.uid, foundUser.email, foundUser.name, foundUser.mobile);
+          window.location.href = 'group-select.html';
+        } else {
+          alert('Invalid email/mobile or password');
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    });
+
+    // Load Dashboard
+    let currentGroupData = null;
+    let showAllGroupNotifications = false;
+
+    const loadDashboard = async () => {
+      if (!currentUser || !currentGroup) return;
+
+      const groupData = await fetchGroupData(currentGroup.id);
+      if (!groupData) {
+        localStorage.removeItem('currentGroup');
+        window.location.href = 'group-select.html';
+        return;
+      }
+
+      if (!groupData.members || !groupData.members[currentUser.uid]) {
+        localStorage.removeItem('currentGroup');
+        alert('You are no longer a member of this group. Redirecting to group selection.');
+        window.location.href = 'group-select.html';
+        return;
+      }
+
+      document.getElementById('groupNameDisplay').textContent = groupData.name || 'Unknown Group';
+      document.getElementById('groupIdDisplay').textContent = 'Group ID: ' + (groupData.id || currentGroup.id);
+      currentGroupData = groupData;
+      const ownerBtn = document.getElementById('deleteGroupBtn');
+      const inviteSection = document.getElementById('inviteSection');
+      const isOwner = currentUser.uid === groupData.createdBy;
+      if (isOwner) {
+        ownerBtn.classList.remove('hidden');
+        inviteSection.classList.remove('hidden');
+      } else {
+        ownerBtn.classList.add('hidden');
+        inviteSection.classList.add('hidden');
+      }
+      
+      // Calculate totals
+      const totals = calculateTotals(groupData);
+      document.getElementById('totalMembers').textContent = totals.memberCount;
+      document.getElementById('totalExpense').textContent = '₹' + totals.totalExpense;
+      document.getElementById('perPersonShare').textContent = '₹' + totals.perPersonShare;
+      
+      // Calculate balances
+      const balances = calculateBalances(groupData, totals.perPersonShare);
+      const userBalance = balances[currentUser.uid] || 0;
+      const balanceColor = userBalance > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+      const balanceSign = userBalance > 0 ? '+' : userBalance < 0 ? '-' : '';
+      document.getElementById('yourBalance').innerHTML = `<span class="${balanceColor}">${balanceSign}${Math.abs(userBalance)}</span>`;
+
+      // Render members
+      await renderMembers(groupData);
+
+      // Render notifications
+      renderGroupNotifications(groupData, showAllGroupNotifications);
+
+      // Render split summary
+      renderSplitSummary(groupData, balances);
+
+      // Render expenses
+      renderExpenses(groupData);
+    };
+
+    // Fetch Group Data
+    const fetchGroupData = async (groupId) => {
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups/${groupId}.json`);
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching group:', error);
+        return null;
+      }
+    };
+
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${FIREBASE_URL}/users.json`);
+        if (!response.ok) return {};
+        const users = await response.json();
+        return users || {};
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        return {};
+      }
+    };
+
+    const createNotification = async (groupId, message) => {
+      const notificationId = generateId();
+      const payload = {
+        message,
+        createdAt: Date.now(),
+        groupId,
+        createdBy: currentUser.uid,
+        createdByName: currentUser.name
+      };
+      try {
+        await fetch(`${FIREBASE_URL}/groups/${groupId}/notifications/${notificationId}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        console.error('Unable to create notification:', error);
+      }
+    };
+
+    const renderGroupNotifications = (groupData, showAll = false) => {
+      const notificationsList = document.getElementById('groupNotificationsList');
+      const notifications = Object.entries(groupData.notifications || {})
+        .map(([id, notification]) => ({ id, ...notification }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      if (!showAll) {
+        notifications.splice(3);
+      }
+      if (notifications.length === 0) {
+        notificationsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No notifications yet.</p>';
+        return;
+      }
+      notificationsList.innerHTML = '';
+      notifications.forEach(notification => {
+        const item = document.createElement('div');
+        item.className = 'rounded-2xl p-4 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950';
+        item.innerHTML = `
+          <p class="text-sm text-slate-900 dark:text-slate-100">${notification.message}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${new Date(notification.createdAt).toLocaleString()}</p>
+        `;
+        notificationsList.appendChild(item);
+      });
+    };
+
+    document.getElementById('viewAllNotificationsBtn').addEventListener('click', () => {
+      showAllGroupNotifications = !showAllGroupNotifications;
+      document.getElementById('viewAllNotificationsBtn').textContent = showAllGroupNotifications ? 'Show recent' : 'View all history';
+      if (currentGroupData) {
+        renderGroupNotifications(currentGroupData, showAllGroupNotifications);
+      }
+    });
+
+    const requestGroupExit = async (groupData) => {
+      if (groupData.exitRequests && groupData.exitRequests[currentUser.uid]) {
+        alert('Your exit request is already pending with the group owner.');
+        return;
+      }
+
+      const exitPayload = {
+        name: currentUser.name,
+        email: currentUser.email,
+        mobile: currentUser.mobile,
+        requestedAt: Date.now()
+      };
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups/${currentGroup.id}/exitRequests/${currentUser.uid}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(exitPayload)
+        });
+
+        if (response.ok) {
+          await createNotification(currentGroup.id, `${currentUser.name} has requested to exit the group.`);
+          alert('Exit request sent to group owner. Please wait for approval.');
+          loadDashboard();
+        } else {
+          alert('Unable to submit exit request.');
+        }
+      } catch (error) {
+        console.error('Error sending exit request:', error);
+        alert('Unable to submit exit request.');
+      }
+    };
+
+    const removeMemberFromGroup = async (memberId, memberName) => {
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups/${currentGroup.id}/members/${memberId}.json`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          await createNotification(currentGroup.id, `${memberName} has been removed from the group by ${currentUser.name}.`);
+          alert(`${memberName} has been removed from the group.`);
+          loadDashboard();
+        } else {
+          alert('Unable to remove member from group.');
+        }
+      } catch (error) {
+        console.error('Error removing member:', error);
+        alert('Unable to remove member from group.');
+      }
+    };
+
+    const fetchUserByContact = async (contact) => {
+      const normalized = contact.trim().toLowerCase();
+      if (!normalized) return null;
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/users.json`);
+        const users = await response.json();
+        if (!users) return null;
+
+        for (const uid in users) {
+          const user = users[uid];
+          if (!user) continue;
+          const email = user.email?.toLowerCase();
+          const mobile = user.mobile?.toString();
+          if (normalized === email || normalized === mobile) {
+            return user;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user by contact:', error);
+      }
+      return null;
+    };
+
+    const inviteGroupMember = async (contact) => {
+      const groupData = await fetchGroupData(currentGroup.id);
+      if (!groupData) {
+        alert('Unable to load group details.');
+        return;
+      }
+
+      const targetUser = await fetchUserByContact(contact);
+      if (!targetUser) {
+        alert('No registered user found with that email or mobile.');
+        return;
+      }
+
+      if (targetUser.uid === currentUser.uid) {
+        alert('You are already in this group.');
+        return;
+      }
+
+      if (groupData.members?.[targetUser.uid]) {
+        alert('This user is already a member of the group.');
+        return;
+      }
+
+      if (groupData.invites?.[targetUser.uid]) {
+        alert('This user is already invited.');
+        return;
+      }
+
+      const invite = {
+        groupId: currentGroup.id,
+        groupName: groupData.name,
+        invitedBy: currentUser.uid,
+        invitedByName: currentUser.name,
+        createdAt: Date.now()
+      };
+
+      try {
+        await fetch(`${FIREBASE_URL}/invitations/${targetUser.uid}/${currentGroup.id}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(invite)
+        });
+
+        await fetch(`${FIREBASE_URL}/groups/${currentGroup.id}/invites/${targetUser.uid}.json`, {
+          method: 'PUT',
+          body: JSON.stringify({ name: targetUser.name, invitedBy: currentUser.uid, status: 'pending' })
+        });
+
+        await createNotification(currentGroup.id, `${targetUser.name} was invited to the group by ${currentUser.name}.`);
+        alert(`${targetUser.name} has been invited to the group.`);
+      } catch (error) {
+        alert('Unable to send invitation.');
+        console.error('Invite error:', error);
+      }
+    };
+
+    // Calculate Totals
+    const calculateTotals = (groupData) => {
+      let totalExpense = 0;
+      const expenses = groupData.expenses || {};
+      for (const id in expenses) {
+        totalExpense += expenses[id].amount || 0;
+      }
+
+      const memberCount = Object.keys(groupData.members || {}).length;
+      const perPersonShare = memberCount > 0 ? Math.round(totalExpense / memberCount * 100) / 100 : 0;
+
+      return { totalExpense, memberCount, perPersonShare };
+    };
+
+    // Calculate Balances
+    const calculateBalances = (groupData, perPersonShare) => {
+      const balances = {};
+      const members = groupData.members || {};
+      const expenses = groupData.expenses || {};
+
+      for (const memberId in members) {
+        let totalPaid = 0;
+        for (const expenseId in expenses) {
+          if (expenses[expenseId].paidBy === memberId) {
+            totalPaid += expenses[expenseId].amount || 0;
+          }
+        }
+        balances[memberId] = Math.round((totalPaid - perPersonShare) * 100) / 100;
+      }
+
+      return balances;
+    };
+
+    // Render Members
+    const renderMembers = async (groupData) => {
+      const members = groupData.members || {};
+      const membersList = document.getElementById('membersList');
+      membersList.innerHTML = '';
+
+      const users = await fetchUsers();
+
+      const ownerId = groupData.createdBy || Object.keys(members)[0] || null;
+      const sortedMembers = Object.entries(members).sort(([idA, memberA], [idB, memberB]) => {
+        if (idA === ownerId) return -1;
+        if (idB === ownerId) return 1;
+        return memberA.name.localeCompare(memberB.name);
+      });
+
+      for (const [memberId, member] of sortedMembers) {
+        const isOwner = memberId === ownerId;
+        const isYou = memberId === currentUser.uid;
+        const exitRequested = !!groupData.exitRequests?.[memberId];
+        const userDetails = users[memberId] || {};
+        const email = userDetails.email || member.email || 'Not available';
+        const mobile = userDetails.mobile || member.mobile || 'Not available';
+        const label = isOwner ? 'Group Owner' : isYou ? 'You' : 'Member';
+        const labelClass = isOwner ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400';
+
+        const memberDiv = document.createElement('div');
+        memberDiv.className = `glass-card rounded-xl p-4 ${isOwner ? 'border-2 border-indigo-500 shadow-lg' : ''}`;
+        memberDiv.innerHTML = `
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full ${isOwner ? 'bg-indigo-600' : 'bg-gradient-to-br from-indigo-500 to-purple-500'} flex items-center justify-center text-white font-bold text-sm">${member.name.charAt(0)}</div>
+              <div class="flex-1">
+                <p class="font-semibold text-slate-900 dark:text-white">${member.name}</p>
+                <p class="text-xs ${labelClass}">${label}</p>
+              </div>
+              ${currentUser.uid === ownerId && !isOwner ? `<button data-member-id="${memberId}" class="removeMemberBtn px-3 py-1 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-semibold transition">Remove</button>` : ''}
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-500 dark:text-slate-400">
+              <p>Email: ${email}</p>
+              <p>Mobile: ${mobile}</p>
+            </div>
+            ${isYou && !isOwner ? `<div class="pt-3"><button id="exitRequestBtn" class="w-full px-3 py-2 rounded-xl ${exitRequested ? 'bg-slate-300 text-slate-700 cursor-not-allowed' : 'bg-rose-500 hover:bg-rose-600 text-white'} text-sm font-semibold transition">${exitRequested ? 'Exit request pending' : 'Request exit group'}</button></div>` : ''}
+          </div>
+        `;
+        membersList.appendChild(memberDiv);
+
+        if (currentUser.uid === ownerId && !isOwner) {
+          const removeBtn = memberDiv.querySelector('.removeMemberBtn');
+          if (removeBtn) {
+            removeBtn.addEventListener('click', async () => {
+              if (confirm(`Remove ${member.name} from this group?`)) {
+                await removeMemberFromGroup(memberId, member.name);
+              }
+            });
+          }
+        }
+
+        if (isYou && !isOwner) {
+          const button = memberDiv.querySelector('#exitRequestBtn');
+          if (button) {
+            button.addEventListener('click', async () => {
+              if (exitRequested) {
+                alert('Your exit request is already pending with the group owner.');
+                return;
+              }
+              await requestGroupExit(groupData);
+            });
+          }
+        }
+      }
+    };
+
+    // Render Split Summary
+    const renderSplitSummary = (groupData, balances) => {
+      const members = groupData.members || {};
+      const splitSummary = document.getElementById('splitSummary');
+      splitSummary.innerHTML = '';
+
+      const settlements = [];
+      const sorted = Object.entries(balances).sort((a, b) => a[1] - b[1]);
+
+      let creditors = sorted.filter(([_, bal]) => bal > 0);
+      let debtors = sorted.filter(([_, bal]) => bal < 0);
+
+      for (let debtor of debtors) {
+        let debt = -debtor[1];
+        for (let creditor of creditors) {
+          if (creditor[1] <= 0) continue;
+          const amount = Math.min(debt, creditor[1]);
+          if (amount > 0) {
+            settlements.push({
+              from: debtor[0],
+              fromName: members[debtor[0]].name,
+              to: creditor[0],
+              toName: members[creditor[0]].name,
+              amount: Math.round(amount * 100) / 100
+            });
+            creditor[1] -= amount;
+            debt -= amount;
+          }
+        }
+      }
+
+      if (settlements.length === 0) {
+        splitSummary.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">Everyone is settled up!</p>';
+        return;
+      }
+
+      for (const settlement of settlements) {
+        const div = document.createElement('div');
+        div.className = 'glass-card rounded-xl p-3 split-item';
+        div.innerHTML = `
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            <span class="font-semibold">${settlement.fromName}</span> should pay <span class="font-semibold">₹${settlement.amount}</span> to <span class="font-semibold">${settlement.toName}</span>
+          </p>
+        `;
+        splitSummary.appendChild(div);
+      }
+    };
+
+    // Render Expenses
+    const renderExpenses = (groupData) => {
+      const expenses = groupData.expenses || {};
+      const members = groupData.members || {};
+      const expensesList = document.getElementById('expensesList');
+      expensesList.innerHTML = '';
+      const isOwner = currentUser.uid === groupData.createdBy;
+
+      const sortedExpenses = Object.entries(expenses).sort((a, b) => (b[1].date || 0) - (a[1].date || 0));
+
+      for (const [id, expense] of sortedExpenses) {
+        const paidByName = members[expense.paidBy]?.name || 'Unknown';
+        const deleteButton = isOwner ? `
+            <button onclick="deleteExpense('${currentGroup.id}', '${id}')" class="text-red-500 hover:text-red-600 p-1 rounded transition">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+            </button>
+          ` : '';
+
+        const div = document.createElement('div');
+        div.className = 'glass-card rounded-xl p-3 expense-item flex items-center justify-between';
+        div.innerHTML = `
+          <div class="flex-1">
+            <p class="font-semibold text-slate-900 dark:text-white text-sm">${expense.description || 'Expense'}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Paid by ${paidByName}</p>
+          </div>
+          <div class="text-right flex items-center gap-3">
+            <span class="font-bold text-indigo-600 dark:text-indigo-400">₹${expense.amount}</span>
+            ${deleteButton}
+          </div>
+        `;
+        expensesList.appendChild(div);
+      }
+
+      if (sortedExpenses.length === 0) {
+        expensesList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No expenses yet</p>';
+      }
+    };
+
+    // Delete Expense
+    window.deleteExpense = async (groupId, expenseId) => {
+      if (!currentGroupData || currentUser.uid !== currentGroupData.createdBy) {
+        alert('Only the group owner can delete expenses.');
+        return;
+      }
+      if (!confirm('Delete this expense?')) return;
+      try {
+        await fetch(`${FIREBASE_URL}/groups/${groupId}/expenses/${expenseId}.json`, { method: 'DELETE' });
+        loadDashboard();
+      } catch (error) {
+        alert('Error deleting expense');
+      }
+    };
+
+    // Add Expense
+    document.getElementById('expenseForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('expenseAmount').value);
+      const description = document.getElementById('expenseDescription').value;
+
+      if (amount <= 0) {
+        alert('Amount must be greater than 0');
+        return;
+      }
+
+      const expense = {
+        amount,
+        description,
+        paidBy: currentUser.uid,
+        date: Date.now()
+      };
+
+      try {
+        await fetch(`${FIREBASE_URL}/groups/${currentGroup.id}/expenses/${generateId()}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(expense)
+        });
+        await createNotification(currentGroup.id, `${currentUser.name} added an expense of ₹${amount}${description ? ' for ' + description : ''}.`);
+        document.getElementById('expenseForm').reset();
+        loadDashboard();
+      } catch (error) {
+        alert('Error adding expense');
+      }
+    });
+
+    document.getElementById('inviteMemberForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const contact = document.getElementById('inviteMemberInput').value;
+      if (!contact.trim()) {
+        alert('Please enter an email or mobile number.');
+        return;
+      }
+      await inviteGroupMember(contact);
+      document.getElementById('inviteMemberForm').reset();
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    // Switch Group
+    document.getElementById('switchGroupBtn').addEventListener('click', () => {
+      localStorage.removeItem('currentGroup');
+      window.location.href = 'group-select.html';
+    });
+
+    // Settings
+    const deleteGroup = async () => {
+      if (!confirm('Delete this group and all its expenses?')) return;
+      try {
+        await fetch(`${FIREBASE_URL}/groups/${currentGroup.id}.json`, { method: 'DELETE' });
+        localStorage.removeItem('currentGroup');
+        window.location.href = 'group-select.html';
+      } catch (error) {
+        alert('Unable to delete group.');
+      }
+    };
+
+    document.getElementById('deleteGroupBtn').addEventListener('click', deleteGroup);
+
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+      window.location.href = 'settings.html';
+    });
+
+    // Initialize
+    const init = () => {
+      if (!loadUser()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const groupId = localStorage.getItem('currentGroup');
+      if (!groupId) {
+        window.location.href = 'group-select.html';
+        return;
+      }
+      
+      currentGroup = { id: groupId };
+      showMainContent();
+      loadDashboard();
+      showCookieBanner();
+    };
+
+    init();
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Select or Create Group – PG Fintrack</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Select or create a PG group for expense sharing with PG Fintrack.">
+  <meta name="keywords" content="PG expense tracker, group selection, PG finance app">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { min-height: 100vh; background: #f8fafc; color-scheme: light dark; }
+    .dark body { background: #070a14; }
+    .glass-card { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px); border: 1px solid rgba(148, 163, 184, 0.24); box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); }
+    .dark .glass-card { background: rgba(15, 23, 42, 0.88); border-color: rgba(71, 85, 105, 0.6); }
+    .button-soft { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .button-soft:active { transform: scale(0.98); }
+    .fade-in { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="font-sans text-slate-900 dark:text-slate-100">
+  <div class="w-full lg:max-w-[1200px] bg-gray-50 dark:bg-gray-900 min-h-[100dvh] sm:rounded-[2.5rem] sm:shadow-2xl overflow-hidden relative flex flex-col mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-lg">₹</div>
+          <h1 class="text-lg font-bold text-slate-900 dark:text-white">PG Fintrack</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <svg id="sunIcon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.536l1.414 1.414a1 1 0 001.414-1.414l-1.414-1.414a1 1 0 00-1.414 1.414zm2.828-2.828l1.414-1.414a1 1 0 00-1.414-1.414l-1.414 1.414a1 1 0 001.414 1.414zM13 11a1 1 0 110 2h-2a1 1 0 110-2h2zm1.464-1.464a1 1 0 001.414-1.414l-1.414-1.414a1 1 0 10-1.414 1.414l1.414 1.414z" clip-rule="evenodd" /></svg>
+            <svg id="moonIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          </button>
+          <button id="logoutBtn" class="px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-y-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto">
+        <!-- Welcome Section -->
+        <div class="glass-card rounded-2xl p-8 mb-8 fade-in text-center">
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Welcome, <span id="userName">User</span>!</h2>
+          <p class="text-slate-600 dark:text-slate-400">Select an existing group or create a new one to get started</p>
+        </div>
+
+        <!-- Create Group Section -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Create a New Group</h3>
+          <form id="createGroupForm" class="space-y-4">
+            <div>
+              <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Group Name</label>
+              <input id="groupNameInput" type="text" placeholder="e.g., Room 101, Flat A..." class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <div>
+              <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Add Members (comma-separated emails/mobiles)</label>
+              <textarea id="membersInput" placeholder="e.g., member1@email.com, 9876543210" rows="3" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"></textarea>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Leave empty to add members later</p>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Create Group</button>
+          </form>
+        </div>
+
+        <!-- Pending Invitations Section -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pending Invitations</h3>
+            <button id="refreshInvitesBtn" class="text-xs text-indigo-600 dark:text-indigo-300 hover:underline">Refresh</button>
+          </div>
+          <div id="invitesList" class="space-y-3">
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Checking for invitations...</p>
+          </div>
+        </div>
+
+        <!-- Join Requests for Creator -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Join Requests for Your Groups</h3>
+            <button id="refreshRequestsBtn" class="text-xs text-indigo-600 dark:text-indigo-300 hover:underline">Refresh</button>
+          </div>
+          <div id="requestsList" class="space-y-3">
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Checking for requests...</p>
+          </div>
+        </div>
+
+        <!-- Exit Requests for Creator -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Exit Requests for Your Groups</h3>
+            <button id="refreshExitRequestsBtn" class="text-xs text-indigo-600 dark:text-indigo-300 hover:underline">Refresh</button>
+          </div>
+          <div id="exitRequestsList" class="space-y-3">
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Checking for exit requests...</p>
+          </div>
+        </div>
+
+        <!-- Notifications Section -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Group Notifications</h3>
+            <button id="viewAllSelectNotificationsBtn" class="text-xs text-indigo-600 dark:text-indigo-300 hover:underline">View all history</button>
+          </div>
+          <div id="selectNotificationsList" class="space-y-3">
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Loading notifications...</p>
+          </div>
+        </div>
+
+        <!-- Your Groups Section -->
+        <div class="mb-8">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Your Groups</h3>
+          <div id="groupsList" class="space-y-3">
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Loading your groups...</p>
+          </div>
+        </div>
+
+        <!-- Join Group Section -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Join an Existing Group</h3>
+          <form id="joinGroupForm" class="space-y-4">
+            <div>
+              <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Group ID</label>
+              <input id="groupIdInput" type="text" placeholder="Enter group ID" class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition button-soft">Join Group</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FIREBASE_URL = 'https://pg-fintrack-website-default-rtdb.firebaseio.com';
+    let currentUser = null;
+
+    // Initialize theme
+    const initTheme = () => {
+      const isDark = localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) document.documentElement.classList.add('dark');
+    };
+    initTheme();
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateThemeIcon();
+    });
+
+    // Update theme icon
+    const updateThemeIcon = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.getElementById('sunIcon').classList.toggle('hidden', !isDark);
+      document.getElementById('moonIcon').classList.toggle('hidden', isDark);
+    };
+    updateThemeIcon();
+
+    // Load user
+    const loadUser = () => {
+      const user = localStorage.getItem('pgfUser');
+      if (user) {
+        currentUser = JSON.parse(user);
+        document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
+        return true;
+      }
+      return false;
+    };
+
+    // Generate ID
+    const generateId = () => Math.random().toString(36).substr(2, 9);
+    let showAllSelectNotifications = false;
+
+    const createGroupNotification = async (groupId, message) => {
+      const notificationId = generateId();
+      const payload = {
+        message,
+        createdAt: Date.now(),
+        groupId,
+        createdBy: currentUser.uid,
+        createdByName: currentUser.name
+      };
+      try {
+        await fetch(`${FIREBASE_URL}/groups/${groupId}/notifications/${notificationId}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        console.error('Unable to create notification:', error);
+      }
+    };
+
+    const loadSelectNotifications = async () => {
+      const notificationsList = document.getElementById('selectNotificationsList');
+      notificationsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">Loading notifications...</p>';
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups.json`);
+        const groups = await response.json();
+        const notifications = [];
+
+        if (groups) {
+          for (const groupId in groups) {
+            const group = groups[groupId];
+            if (group?.members?.[currentUser.uid]) {
+              const groupNotifications = group.notifications || {};
+              for (const noteId in groupNotifications) {
+                notifications.push({
+                  id: noteId,
+                  groupId,
+                  groupName: group.name || 'Group',
+                  ...groupNotifications[noteId]
+                });
+              }
+            }
+          }
+        }
+
+        notifications.sort((a, b) => b.createdAt - a.createdAt);
+        if (!showAllSelectNotifications) notifications.splice(3);
+        document.getElementById('viewAllSelectNotificationsBtn').textContent = showAllSelectNotifications ? 'Show recent' : 'View all history';
+
+        if (notifications.length === 0) {
+          notificationsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No notifications yet.</p>';
+          return;
+        }
+
+        notificationsList.innerHTML = '';
+        notifications.forEach(notification => {
+          const item = document.createElement('div');
+          item.className = 'rounded-2xl p-4 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950';
+          item.innerHTML = `
+            <p class="text-sm text-slate-900 dark:text-slate-100">${notification.message}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${notification.groupName} • ${new Date(notification.createdAt).toLocaleString()}</p>
+          `;
+          notificationsList.appendChild(item);
+        });
+      } catch (error) {
+        notificationsList.innerHTML = '<p class="text-red-500 text-sm">Unable to load notifications.</p>';
+        console.error('Unable to load notifications:', error);
+      }
+    };
+
+    const fetchUsers = async () => {
+      const response = await fetch(`${FIREBASE_URL}/users.json`);
+      return response.ok ? await response.json() : null;
+    };
+
+    const findMatchingUsers = (contacts, users) => {
+      const found = [];
+      const normalizedContacts = contacts.map(c => c.toLowerCase());
+
+      for (const uid in users) {
+        const user = users[uid];
+        if (!user) continue;
+        const email = user.email?.toLowerCase();
+        const mobile = user.mobile?.toString();
+        const matchIndex = normalizedContacts.findIndex(contact => contact === email || contact === mobile);
+        if (matchIndex !== -1 && uid !== currentUser.uid) {
+          found.push({ uid, name: user.name, match: normalizedContacts[matchIndex] });
+        }
+      }
+      return found;
+    };
+
+    const sendInvitations = async (groupId, groupName, invitees) => {
+      for (const invitee of invitees) {
+        const invite = {
+          groupId,
+          groupName,
+          invitedBy: currentUser.uid,
+          invitedByName: currentUser.name,
+          createdAt: Date.now()
+        };
+        await fetch(`${FIREBASE_URL}/invitations/${invitee.uid}/${groupId}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(invite)
+        });
+      }
+    };
+
+    // Create Group
+    document.getElementById('createGroupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!currentUser) {
+        alert('Please login first');
+        return;
+      }
+
+      const groupName = document.getElementById('groupNameInput').value.trim();
+      const membersInput = document.getElementById('membersInput').value.trim();
+
+      if (!groupName) {
+        alert('Group name is required');
+        return;
+      }
+
+      const contacts = membersInput ? membersInput.split(',').map(m => m.trim()).filter(m => m) : [];
+      const users = await fetchUsers();
+      const invitees = users && contacts.length ? findMatchingUsers(contacts, users) : [];
+      const unmatched = contacts.filter(contact => !invitees.some(inv => inv.match === contact.toLowerCase()));
+
+      if (contacts.length > 0 && invitees.length === 0) {
+        alert('No registered users found for the entered members. Please invite only registered users.');
+        return;
+      }
+
+      const groupId = generateId();
+      const invites = {};
+      invitees.forEach(inv => {
+        invites[inv.uid] = { name: inv.name, invitedBy: currentUser.uid, status: 'pending' };
+      });
+
+      const groupData = {
+        id: groupId,
+        name: groupName,
+        createdBy: currentUser.uid,
+        members: { [currentUser.uid]: { name: currentUser.name, email: currentUser.email, mobile: currentUser.mobile } },
+        invites,
+        expenses: {},
+        createdAt: Date.now()
+      };
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups/${groupId}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(groupData)
+        });
+
+        if (response.ok) {
+          if (invitees.length) {
+            await sendInvitations(groupId, groupName, invitees);
+          }
+          localStorage.setItem('currentGroup', groupId);
+          let message = 'Group created successfully!';
+          if (contacts.length === 0) {
+            message += ' You can add members anytime.';
+          } else if (unmatched.length) {
+            message += '\nNote: these contacts are not registered, so they were not invited: ' + unmatched.join(', ');
+          }
+          alert(message);
+          window.location.href = 'index.html';
+        } else {
+          alert('Failed to create group');
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    });
+
+    // Load user groups
+    const loadUserGroups = async () => {
+      if (!currentUser) return;
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups.json`);
+        const allGroups = await response.json();
+
+        const groupsList = document.getElementById('groupsList');
+        const userGroups = [];
+
+        if (allGroups) {
+          for (const groupId in allGroups) {
+            const group = allGroups[groupId];
+            if (group.members && group.members[currentUser.uid]) {
+              userGroups.push({ id: groupId, ...group });
+            }
+          }
+        }
+
+        if (userGroups.length === 0) {
+          groupsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">You haven\'t joined any groups yet</p>';
+          return;
+        }
+
+        groupsList.innerHTML = '';
+        for (const group of userGroups) {
+          const memberCount = Object.keys(group.members || {}).length;
+          const expenseCount = Object.keys(group.expenses || {}).length;
+
+          const div = document.createElement('div');
+          div.className = 'glass-card rounded-xl p-4 flex items-center justify-between cursor-pointer hover:shadow-md transition';
+          div.innerHTML = `
+            <div class="flex-1">
+              <p class="font-semibold text-slate-900 dark:text-white">${group.name}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">${memberCount} members • ${expenseCount} expenses</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Group ID: ${group.id}</p>
+            </div>
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          `;
+          div.addEventListener('click', () => {
+            localStorage.setItem('currentGroup', group.id);
+            window.location.href = 'index.html';
+          });
+          groupsList.appendChild(div);
+        }
+      } catch (error) {
+        console.error('Error loading groups:', error);
+        document.getElementById('groupsList').innerHTML = '<p class="text-red-500 text-sm">Error loading groups</p>';
+      }
+    };
+
+    const loadInvitations = async () => {
+      const invitesList = document.getElementById('invitesList');
+      invitesList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">Checking for invitations...</p>';
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/invitations/${currentUser.uid}.json`);
+        const invites = await response.json();
+
+        if (!invites) {
+          invitesList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No pending invitations.</p>';
+          return;
+        }
+
+        invitesList.innerHTML = '';
+        for (const groupId in invites) {
+          const invite = invites[groupId];
+          const div = document.createElement('div');
+          div.className = 'glass-card rounded-xl p-4';
+          div.innerHTML = `
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">${invite.groupName}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Invited by ${invite.invitedByName}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Group ID: ${groupId}</p>
+              </div>
+              <div class="flex gap-2">
+                <button data-group-id="${groupId}" class="acceptInviteBtn px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold">Accept</button>
+                <button data-group-id="${groupId}" class="rejectInviteBtn px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-sm font-semibold">Reject</button>
+              </div>
+            </div>
+          `;
+          invitesList.appendChild(div);
+        }
+
+        document.querySelectorAll('.acceptInviteBtn').forEach(button => {
+          button.addEventListener('click', async () => {
+            await respondToInvite(button.dataset.groupId, true);
+          });
+        });
+
+        document.querySelectorAll('.rejectInviteBtn').forEach(button => {
+          button.addEventListener('click', async () => {
+            await respondToInvite(button.dataset.groupId, false);
+          });
+        });
+      } catch (error) {
+        invitesList.innerHTML = '<p class="text-red-500 text-sm">Unable to load invitations.</p>';
+      }
+    };
+
+    const respondToInvite = async (groupId, accept) => {
+      try {
+        const groupResponse = await fetch(`${FIREBASE_URL}/groups/${groupId}.json`);
+        const group = await groupResponse.json();
+        if (!group) {
+          await fetch(`${FIREBASE_URL}/invitations/${currentUser.uid}/${groupId}.json`, { method: 'DELETE' });
+          alert('This group no longer exists.');
+          loadInvitations();
+          return;
+        }
+
+        if (accept) {
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/members/${currentUser.uid}.json`, {
+            method: 'PUT',
+            body: JSON.stringify({ name: currentUser.name, email: currentUser.email, mobile: currentUser.mobile })
+          });
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/invites/${currentUser.uid}.json`, { method: 'DELETE' });
+          await fetch(`${FIREBASE_URL}/invitations/${currentUser.uid}/${groupId}.json`, { method: 'DELETE' });
+          await createGroupNotification(groupId, `${currentUser.name} accepted the invitation and joined the group.`);
+          localStorage.setItem('currentGroup', groupId);
+          window.location.href = 'index.html';
+          return;
+        }
+
+        await fetch(`${FIREBASE_URL}/groups/${groupId}/invites/${currentUser.uid}.json`, {
+          method: 'DELETE'
+        });
+        await fetch(`${FIREBASE_URL}/invitations/${currentUser.uid}/${groupId}.json`, { method: 'DELETE' });
+        await createGroupNotification(groupId, `${currentUser.name} declined the invitation.`);
+        loadInvitations();
+      } catch (error) {
+        alert('Unable to respond to invitation.');
+      }
+    };
+
+    const loadJoinRequests = async () => {
+      const requestsList = document.getElementById('requestsList');
+      requestsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">Checking for requests...</p>';
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups.json`);
+        const groups = await response.json();
+        if (!groups) {
+          requestsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No join requests at the moment.</p>';
+          return;
+        }
+
+        const ownerGroups = Object.entries(groups)
+          .filter(([groupId, group]) => group && group.createdBy === currentUser.uid && group.requests && Object.keys(group.requests).length > 0)
+          .map(([groupId, group]) => ({ id: groupId, ...group }));
+
+        if (ownerGroups.length === 0) {
+          requestsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No join requests pending for your groups.</p>';
+          return;
+        }
+
+        requestsList.innerHTML = '';
+        ownerGroups.forEach(group => {
+          const groupCard = document.createElement('div');
+          groupCard.className = 'glass-card rounded-xl p-4';
+          groupCard.innerHTML = `
+            <div class="mb-3">
+              <p class="font-semibold text-slate-900 dark:text-white">${group.name}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Group ID: ${group.id}</p>
+            </div>
+          `;
+
+          const requestItems = document.createElement('div');
+          requestItems.className = 'space-y-3';
+
+          for (const requesterId in group.requests) {
+            const request = group.requests[requesterId];
+            const requestDiv = document.createElement('div');
+            requestDiv.className = 'p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950';
+            requestDiv.innerHTML = `
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="font-semibold text-slate-900 dark:text-white">${request.name}</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Requested to join on ${new Date(request.requestedAt).toLocaleDateString()}</p>
+                </div>
+                <div class="flex gap-2 mt-3 sm:mt-0">
+                  <button data-group-id="${group.id}" data-requester-id="${requesterId}" class="acceptRequestBtn px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold">Accept</button>
+                  <button data-group-id="${group.id}" data-requester-id="${requesterId}" class="rejectRequestBtn px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-sm font-semibold">Reject</button>
+                </div>
+              </div>
+            `;
+            requestItems.appendChild(requestDiv);
+          }
+
+          groupCard.appendChild(requestItems);
+          requestsList.appendChild(groupCard);
+        });
+
+        document.querySelectorAll('.acceptRequestBtn').forEach(button => {
+          button.addEventListener('click', async () => {
+            await respondToJoinRequest(button.dataset.groupId, button.dataset.requesterId, true);
+          });
+        });
+        document.querySelectorAll('.rejectRequestBtn').forEach(button => {
+          button.addEventListener('click', async () => {
+            await respondToJoinRequest(button.dataset.groupId, button.dataset.requesterId, false);
+          });
+        });
+      } catch (error) {
+        requestsList.innerHTML = '<p class="text-red-500 text-sm">Unable to load join requests.</p>';
+      }
+    };
+
+    const respondToJoinRequest = async (groupId, requesterId, accept) => {
+      try {
+        const groupResponse = await fetch(`${FIREBASE_URL}/groups/${groupId}.json`);
+        const group = await groupResponse.json();
+        if (!group) {
+          alert('This group no longer exists.');
+          loadJoinRequests();
+          return;
+        }
+
+        if (accept) {
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/members/${requesterId}.json`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              name: group.requests?.[requesterId]?.name || 'Member',
+              email: group.requests?.[requesterId]?.email || 'Not available',
+              mobile: group.requests?.[requesterId]?.mobile || 'Not available'
+            })
+          });
+          if (group.invites && group.invites[requesterId]) {
+            await fetch(`${FIREBASE_URL}/groups/${groupId}/invites/${requesterId}.json`, { method: 'DELETE' });
+          }
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/requests/${requesterId}.json`, { method: 'DELETE' });
+          await createGroupNotification(groupId, `${group.requests?.[requesterId]?.name || 'A member'} joined the group.`);
+          alert('Request accepted. Member added to the group.');
+        } else {
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/requests/${requesterId}.json`, { method: 'DELETE' });
+          await createGroupNotification(groupId, `${group.requests?.[requesterId]?.name || 'A member'} had their join request rejected.`);
+          alert('Request rejected.');
+        }
+        loadJoinRequests();
+        loadSelectNotifications();
+      } catch (error) {
+        alert('Unable to respond to join request.');
+      }
+    };
+
+    const loadExitRequests = async () => {
+      const exitRequestsList = document.getElementById('exitRequestsList');
+      exitRequestsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">Checking for exit requests...</p>';
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups.json`);
+        const groups = await response.json();
+        if (!groups) {
+          exitRequestsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No exit requests at the moment.</p>';
+          return;
+        }
+
+        const ownerGroups = Object.entries(groups)
+          .filter(([groupId, group]) => group && group.createdBy === currentUser.uid && group.exitRequests && Object.keys(group.exitRequests).length > 0)
+          .map(([groupId, group]) => ({ id: groupId, ...group }));
+
+        if (ownerGroups.length === 0) {
+          exitRequestsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No exit requests pending for your groups.</p>';
+          return;
+        }
+
+        exitRequestsList.innerHTML = '';
+        ownerGroups.forEach(group => {
+          const groupCard = document.createElement('div');
+          groupCard.className = 'glass-card rounded-xl p-4';
+          groupCard.innerHTML = `
+            <div class="mb-3">
+              <p class="font-semibold text-slate-900 dark:text-white">${group.name}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Group ID: ${group.id}</p>
+            </div>
+          `;
+
+          const requestItems = document.createElement('div');
+          requestItems.className = 'space-y-3';
+
+          for (const memberId in group.exitRequests) {
+            const request = group.exitRequests[memberId];
+            const requestDiv = document.createElement('div');
+            requestDiv.className = 'p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950';
+            requestDiv.innerHTML = `
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="font-semibold text-slate-900 dark:text-white">${request.name}</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Requested exit on ${new Date(request.requestedAt).toLocaleDateString()}</p>
+                </div>
+                <div class="flex gap-2 mt-3 sm:mt-0">
+                  <button data-group-id="${group.id}" data-member-id="${memberId}" class="acceptExitBtn px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold">Accept</button>
+                  <button data-group-id="${group.id}" data-member-id="${memberId}" class="rejectExitBtn px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-sm font-semibold">Reject</button>
+                </div>
+              </div>
+            `;
+            requestItems.appendChild(requestDiv);
+          }
+
+          groupCard.appendChild(requestItems);
+          exitRequestsList.appendChild(groupCard);
+        });
+
+        document.querySelectorAll('.acceptExitBtn').forEach(button => {
+          button.addEventListener('click', async () => {
+            await respondToExitRequest(button.dataset.groupId, button.dataset.memberId, true);
+          });
+        });
+        document.querySelectorAll('.rejectExitBtn').forEach(button => {
+          button.addEventListener('click', async () => {
+            await respondToExitRequest(button.dataset.groupId, button.dataset.memberId, false);
+          });
+        });
+      } catch (error) {
+        exitRequestsList.innerHTML = '<p class="text-red-500 text-sm">Unable to load exit requests.</p>';
+      }
+    };
+
+    const respondToExitRequest = async (groupId, memberId, accept) => {
+      try {
+        const groupResponse = await fetch(`${FIREBASE_URL}/groups/${groupId}.json`);
+        const group = await groupResponse.json();
+        if (!group) {
+          alert('This group no longer exists.');
+          loadExitRequests();
+          return;
+        }
+
+        const request = group.exitRequests?.[memberId];
+        if (accept) {
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/members/${memberId}.json`, { method: 'DELETE' });
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/exitRequests/${memberId}.json`, { method: 'DELETE' });
+          await createGroupNotification(groupId, `${request?.name || 'A member'} has left the group.`);
+          alert('Exit request accepted. Member removed from the group.');
+        } else {
+          await fetch(`${FIREBASE_URL}/groups/${groupId}/exitRequests/${memberId}.json`, { method: 'DELETE' });
+          await createGroupNotification(groupId, `${request?.name || 'A member'} had their exit request rejected.`);
+          alert('Exit request rejected. Member remains in the group.');
+        }
+        loadExitRequests();
+        loadSelectNotifications();
+      } catch (error) {
+        alert('Unable to respond to exit request.');
+      }
+    };
+
+    // Join Group
+    document.getElementById('joinGroupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!currentUser) {
+        alert('Please login first');
+        return;
+      }
+
+      const groupId = document.getElementById('groupIdInput').value.trim();
+
+      if (!groupId) {
+        alert('Group ID is required');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups/${groupId}.json`);
+        const group = await response.json();
+
+        if (!group) {
+          alert('Group not found');
+          return;
+        }
+
+        if (group.members && group.members[currentUser.uid]) {
+          alert('You are already a member of this group');
+          return;
+        }
+
+        if (group.invites && group.invites[currentUser.uid]) {
+          alert('You already have a pending invitation for this group. Please accept it from your invitations list.');
+          return;
+        }
+
+        if (group.requests && group.requests[currentUser.uid]) {
+          alert('Your join request is already pending with the group owner.');
+          return;
+        }
+
+        const requestPayload = {
+          name: currentUser.name,
+          email: currentUser.email,
+          mobile: currentUser.mobile,
+          requestedAt: Date.now()
+        };
+
+        const updateResponse = await fetch(`${FIREBASE_URL}/groups/${groupId}/requests/${currentUser.uid}.json`, {
+          method: 'PUT',
+          body: JSON.stringify(requestPayload)
+        });
+
+        if (updateResponse.ok) {
+          alert('Join request sent to the group owner. Please wait for approval.');
+          document.getElementById('joinGroupForm').reset();
+        } else {
+          alert('Failed to send join request');
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('pgfUser');
+      localStorage.removeItem('currentGroup');
+      window.location.href = 'home.html';
+    });
+
+    document.getElementById('refreshInvitesBtn').addEventListener('click', () => {
+      loadInvitations();
+    });
+
+    document.getElementById('refreshRequestsBtn').addEventListener('click', () => {
+      loadJoinRequests();
+    });
+
+    document.getElementById('refreshExitRequestsBtn').addEventListener('click', () => {
+      loadExitRequests();
+    });
+
+    document.getElementById('viewAllSelectNotificationsBtn').addEventListener('click', () => {
+      showAllSelectNotifications = !showAllSelectNotifications;
+      loadSelectNotifications();
+    });
+
+    // Initialize
+    const init = () => {
+      if (!loadUser()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      loadUserGroups();
+      loadInvitations();
+      loadJoinRequests();
+      loadExitRequests();
+      loadSelectNotifications();
+    };
+
+    init();
+
+    // Logout
+
+  </script>
+</body>
+</html>
+
+

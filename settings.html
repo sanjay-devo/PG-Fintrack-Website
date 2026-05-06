@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Settings | PG Fintrack</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="PG Fintrack settings page for theme, account, and group preferences.">
+  <meta name="keywords" content="PG Fintrack settings, group settings, theme toggle, logout">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta property="og:title" content="PG Fintrack – Settings">
+  <meta property="og:description" content="Manage your PG Fintrack account, theme, and group settings.">
+  <meta property="og:image" content="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <meta property="og:type" content="website">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { min-height: 100vh; background: #f8fafc; color-scheme: light dark; }
+    .dark body { background: #070a14; }
+    * { transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+    .glass-card { background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); border: 1px solid rgba(148,163,184,0.24); box-shadow: 0 18px 45px rgba(15,23,42,0.08); }
+    .dark .glass-card { background: rgba(15,23,42,0.88); border-color: rgba(71,85,105,0.6); }
+    .setting-item { transition: transform 0.2s ease, background-color 0.2s ease; }
+    .setting-item:hover { transform: translateY(-1px); }
+    .page-footer a { transition: color 0.2s ease; }
+  </style>
+</head>
+<body class="font-sans text-slate-900 dark:text-slate-100">
+  <div class="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <header class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">← Back to dashboard</a>
+          <p class="mt-6 text-xs uppercase tracking-[0.32em] text-indigo-500">Settings</p>
+          <h1 class="mt-4 text-4xl font-semibold tracking-tight text-slate-950 dark:text-white">PG Fintrack control center</h1>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">Manage theme, group preferences, and your account session in one place.</p>
+        </div>
+      </header>
+
+      <div class="glass-card rounded-[32px] border border-white/70 dark:border-slate-700/70 p-6 shadow-soft">
+        <div class="grid gap-6">
+          <div class="rounded-3xl bg-slate-50 dark:bg-slate-900/80 p-5 border border-slate-200/70 dark:border-slate-700/70 flex items-center gap-4">
+            <div id="profileAvatar" class="flex h-14 w-14 items-center justify-center rounded-3xl bg-indigo-600/10 text-indigo-700 dark:bg-indigo-400/15 dark:text-indigo-200 text-xl font-semibold">P</div>
+            <div>
+              <p class="text-base font-semibold text-slate-950 dark:text-white" id="profileName">PG Fintrack user</p>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-400" id="profileEmail">Email not set</p>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-400" id="profileMobile">Mobile not set</p>
+            </div>
+          </div>
+
+          <div class="grid gap-4">
+            <button id="themeToggle" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-200">🌙</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">Dark mode</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Toggle between light and dark appearance.</p>
+                </div>
+              </div>
+              <span id="themeStatus" class="text-sm font-semibold text-slate-700 dark:text-slate-200">Off</span>
+            </button>
+
+            <button id="switchGroupBtn" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-slate-100 text-slate-800 dark:bg-slate-700/60 dark:text-slate-100">👥</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">Switch group</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Join a different room or group.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+
+            <button id="shareButton" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-200">📤</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">Share app</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Send PG Fintrack to friends and roommates.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+
+            <button id="aboutBtn" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-200">ℹ️</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">About</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Learn more about PG Fintrack.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+
+            <button id="privacyBtn" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-purple-100 text-purple-700 dark:bg-purple-500/15 dark:text-purple-200">🔒</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">Privacy Policy</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Read our privacy policy.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+
+            <button id="termsBtn" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-200">📄</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">Terms of Service</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Read our terms and conditions.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+
+            <button id="cookiesBtn" class="setting-item w-full rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-200">🍪</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-950 dark:text-white">Cookie Policy</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your cookie preferences.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+
+            <button id="logoutBtn" class="setting-item w-full rounded-3xl border border-rose-200 bg-rose-50/90 dark:border-rose-400/20 dark:bg-rose-500/10 p-5 text-left hover:bg-rose-100 dark:hover:bg-rose-500/20 transition shadow-sm flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-12 w-12 items-center justify-center rounded-3xl bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-200">🚪</span>
+                <div>
+                  <p class="text-sm font-semibold text-rose-700 dark:text-rose-100">Logout</p>
+                  <p class="mt-1 text-sm text-rose-600 dark:text-rose-200">Sign out and return to login.</p>
+                </div>
+              </div>
+              <span class="text-sm text-slate-400">→</span>
+            </button>
+          </div>
+
+          <div class="mt-10 grid gap-6">
+            <div class="rounded-3xl bg-slate-50 dark:bg-slate-950 p-6 border border-slate-200/70 dark:border-slate-700/70">
+              <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Account Details</h2>
+              <form id="accountForm" class="grid gap-4">
+                <div>
+                  <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Full Name</label>
+                  <input id="accountName" type="text" class="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" required>
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Email</label>
+                  <input id="accountEmail" type="email" class="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" required>
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Mobile</label>
+                  <input id="accountMobile" type="tel" class="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" required>
+                </div>
+                <button type="submit" class="w-full px-4 py-3 rounded-2xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">Save account</button>
+              </form>
+            </div>
+
+            <div class="rounded-3xl bg-slate-50 dark:bg-slate-950 p-6 border border-slate-200/70 dark:border-slate-700/70">
+              <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Change Password</h2>
+              <form id="passwordForm" class="grid gap-4">
+                <div>
+                  <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">New Password</label>
+                  <input id="newPassword" type="password" class="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" required>
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Confirm Password</label>
+                  <input id="confirmPassword" type="password" class="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" required>
+                </div>
+                <button type="submit" class="w-full px-4 py-3 rounded-2xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">Update password</button>
+              </form>
+            </div>
+
+            <div class="rounded-3xl bg-slate-50 dark:bg-slate-950 p-6 border border-slate-200/70 dark:border-slate-700/70">
+              <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Your Joined Groups</h2>
+              <div id="groupsList" class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                <p>Loading groups...</p>
+              </div>
+            </div>
+          </div>
+
+          <p id="statusMessage" class="mt-4 text-sm text-slate-600 dark:text-slate-300"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FIREBASE_URL = 'https://pg-fintrack-website-default-rtdb.firebaseio.com';
+    const STORAGE_KEY = 'pgfUser';
+    let currentUser = null;
+
+    const getSession = () => {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    };
+
+    const saveTheme = (dark) => {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    };
+
+    const setThemeUI = (dark) => {
+      document.documentElement.classList.toggle('dark', dark);
+      const status = document.getElementById('themeStatus');
+      if (status) status.textContent = dark ? 'On' : 'Off';
+    };
+
+    const initTheme = () => {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const dark = saved === 'dark' || (!saved && prefersDark);
+      setThemeUI(dark);
+    };
+
+    const updateProfileUI = () => {
+      const profileName = document.getElementById('profileName');
+      const profileEmail = document.getElementById('profileEmail');
+      const profileMobile = document.getElementById('profileMobile');
+      const avatar = document.getElementById('profileAvatar');
+      if (!currentUser || !profileName || !avatar) return;
+      profileName.textContent = currentUser.name || 'PG Fintrack user';
+      profileEmail.textContent = currentUser.email ? `Email: ${currentUser.email}` : 'Email not set';
+      profileMobile.textContent = currentUser.mobile ? `Mobile: ${currentUser.mobile}` : 'Mobile not set';
+      avatar.textContent = (currentUser.name || 'P').charAt(0).toUpperCase();
+      const accountName = document.getElementById('accountName');
+      const accountEmail = document.getElementById('accountEmail');
+      const accountMobile = document.getElementById('accountMobile');
+      if (accountName) accountName.value = currentUser.name || '';
+      if (accountEmail) accountEmail.value = currentUser.email || '';
+      if (accountMobile) accountMobile.value = currentUser.mobile || '';
+    };
+
+    const showStatus = (message) => {
+      const status = document.getElementById('statusMessage');
+      if (status) status.textContent = message;
+    };
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = !document.documentElement.classList.contains('dark');
+      setThemeUI(isDark);
+      saveTheme(isDark);
+      showStatus(isDark ? 'Dark mode enabled.' : 'Light mode enabled.');
+    });
+
+    document.getElementById('switchGroupBtn').addEventListener('click', () => {
+      window.location.href = 'group-select.html';
+    });
+
+    document.getElementById('shareButton').addEventListener('click', async () => {
+      const shareData = {
+        title: 'PG Fintrack',
+        text: 'Join me on PG Fintrack to split group expenses and settle bills fairly.',
+        url: window.location.origin + '/home.html'
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          showStatus('Share dialog opened.');
+        } catch (e) {
+          showStatus('Sharing canceled.');
+        }
+      } else {
+        navigator.clipboard.writeText(shareData.url).then(() => {
+          showStatus('Link copied to clipboard.');
+        }).catch(() => {
+          showStatus('Unable to copy link.');
+        });
+      }
+    });
+
+    document.getElementById('aboutBtn').addEventListener('click', () => {
+      window.location.href = 'about.html';
+    });
+
+    document.getElementById('privacyBtn').addEventListener('click', () => {
+      window.location.href = 'privacy.html';
+    });
+
+    document.getElementById('termsBtn').addEventListener('click', () => {
+      window.location.href = 'terms.html';
+    });
+
+    document.getElementById('cookiesBtn').addEventListener('click', () => {
+      window.location.href = 'cookies.html';
+    });
+
+    const saveUserSession = (user) => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      currentUser = user;
+    };
+
+    const updateUserInFirebase = async (updates) => {
+      try {
+        const response = await fetch(`${FIREBASE_URL}/users/${currentUser.uid}.json`, {
+          method: 'PATCH',
+          body: JSON.stringify(updates)
+        });
+        return response.ok;
+      } catch (error) {
+        console.error('Unable to update user:', error);
+        return false;
+      }
+    };
+
+    const loadGroups = async () => {
+      const groupsList = document.getElementById('groupsList');
+      groupsList.innerHTML = '<p>Loading groups...</p>';
+      try {
+        const response = await fetch(`${FIREBASE_URL}/groups.json`);
+        const groups = await response.json();
+        const joined = [];
+        if (groups) {
+          for (const groupId in groups) {
+            const group = groups[groupId];
+            if (group?.members?.[currentUser.uid]) {
+              joined.push({ id: groupId, ...group });
+            }
+          }
+        }
+        if (joined.length === 0) {
+          groupsList.innerHTML = '<p class="text-slate-500 dark:text-slate-400">You have not joined any groups yet.</p>';
+          return;
+        }
+        groupsList.innerHTML = '';
+        joined.forEach(group => {
+          const card = document.createElement('div');
+          card.className = 'rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white dark:bg-slate-900/80 p-4 shadow-sm hover:border-indigo-500 transition cursor-pointer';
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">${group.name || 'Unnamed Group'}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Group ID: ${group.id}</p>
+              </div>
+              <span class="text-xs text-indigo-600 dark:text-indigo-300">Switch</span>
+            </div>
+          `;
+          card.addEventListener('click', () => {
+            localStorage.setItem('currentGroup', group.id);
+            window.location.href = 'index.html';
+          });
+          groupsList.appendChild(card);
+        });
+      } catch (error) {
+        groupsList.innerHTML = '<p class="text-red-500">Unable to load joined groups.</p>';
+      }
+    };
+
+    document.getElementById('accountForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('accountName').value.trim();
+      const email = document.getElementById('accountEmail').value.trim();
+      const mobile = document.getElementById('accountMobile').value.trim();
+      if (!name || !email || !mobile) {
+        showStatus('Please fill all account fields.');
+        return;
+      }
+      if (!/^\d{10}$/.test(mobile)) {
+        showStatus('Mobile number must be 10 digits.');
+        return;
+      }
+      const success = await updateUserInFirebase({ name, email, mobile });
+      if (success) {
+        saveUserSession({ ...currentUser, name, email, mobile });
+        updateProfileUI();
+        showStatus('Account details updated successfully.');
+      } else {
+        showStatus('Unable to save account details.');
+      }
+    });
+
+    document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newPassword = document.getElementById('newPassword').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+      if (!newPassword || !confirmPassword) {
+        showStatus('Please enter both password fields.');
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        showStatus('Passwords do not match.');
+        return;
+      }
+      const success = await updateUserInFirebase({ password: newPassword });
+      if (success) {
+        showStatus('Password updated successfully.');
+        document.getElementById('passwordForm').reset();
+      } else {
+        showStatus('Unable to update password.');
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('currentGroup');
+      window.location.href = 'login.html';
+    });
+
+    const initPage = () => {
+      initTheme();
+      currentUser = getSession();
+      if (!currentUser || !currentUser.uid) {
+        window.location.href = 'login.html';
+        return;
+      }
+      updateProfileUI();
+      loadGroups();
+    };
+
+    initPage();
+  </script>
+</body>
+</html>
+

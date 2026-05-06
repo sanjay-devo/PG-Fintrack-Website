@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cookie Policy | PG Fintrack</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="PG Fintrack cookie policy explains our cookie usage and options.">
+  <meta name="keywords" content="PG Fintrack cookies, cookie policy, consent">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter','sans-serif']} } } };
+  </script>
+  <style>
+    body {
+      min-height: 100vh;
+      background: #f8fafc;
+      color-scheme: light dark;
+    }
+    .dark body {
+      background: #070a14;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148,163,184,0.22);
+      box-shadow: 0 18px 45px rgba(15,23,42,0.06);
+    }
+    .dark .glass-card {
+      background: rgba(15,23,42,0.88);
+      border-color: rgba(71,85,105,0.5);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.3);
+    }
+    .section-title {
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4338ca;
+    }
+    .section-body {
+      max-width: 40rem;
+      margin-top: 0.75rem;
+      color: #475569;
+    }
+    .dark .section-body {
+      color: #cbd5e1;
+    }
+    #cookieBanner { transform: translateY(18px); opacity: 0; transition: transform 0.28s ease, opacity 0.28s ease; }
+    #cookieBanner.show-banner { transform: translateY(0); opacity: 1; }
+    #cookieModal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+    #cookieModal.show-modal { opacity: 1; visibility: visible; }
+    .page-footer a { transition: color 0.2s ease; }
+  </style>
+</head>
+<body class="font-sans text-slate-900 dark:text-slate-100">
+  <!-- Cookie Consent Modal -->
+  <div id="cookieModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 opacity-0 invisible transition-all duration-300">
+    <div class="max-w-md mx-4 w-full">
+      <div class="glass-card rounded-3xl border border-slate-200/80 bg-white/95 shadow-2xl p-6 backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-950/95">
+        <div class="text-center mb-4">
+          <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3">
+            <span class="text-2xl">🍪</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Cookie Consent</h3>
+        </div>
+        <div class="mb-6">
+          <p class="text-sm text-slate-600 dark:text-slate-400">We use cookies to improve your experience. By accepting, you consent to our cookie policy.</p>
+        </div>
+        <div class="flex gap-3">
+          <button id="cookieReject" class="flex-1 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-semibold rounded-lg transition">Reject</button>
+          <button id="cookieAcceptModal" class="flex-1 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg transition">Accept</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="mb-10 space-y-4">
+        <a href="home.html" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">← Back to home</a>
+        <p class="section-title mt-6">Cookie policy</p>
+        <h1 class="mt-4 text-3xl sm:text-4xl font-semibold text-slate-950 dark:text-white">Simple cookie guidance for PG Fintrack users.</h1>
+      </div>
+      <div class="glass-card rounded-[32px] border border-white/70 dark:border-slate-700/70 p-8 shadow-soft space-y-8">
+        <section>
+          <h2 class="text-2xl font-semibold text-slate-950 dark:text-white">What cookies do</h2>
+          <p class="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300">We use cookies only to remember your preferences, improve your experience, and keep the app responsive. No unnecessary tracking is performed.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl font-semibold text-slate-950 dark:text-white">Your choices</h2>
+          <p class="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300">You can accept or decline cookies using the banner on the site. Decline will hide the prompt and keep your preference locally.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl font-semibold text-slate-950 dark:text-white">How to change settings</h2>
+          <p class="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300">If you want to change your cookie consent later, clear the browser localStorage for this site or use your browser privacy controls.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+  <footer class="mt-12 page-footer">
+    <div class="glass-card rounded-[28px] border border-white/70 dark:border-slate-700/70 p-6 shadow-soft">
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Quick links</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="about.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">About</a>
+            <a href="privacy.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Privacy</a>
+            <a href="cookies.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Cookies</a>
+            <a href="terms.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Terms</a>
+            <a href="mailto:sanjayvaishya.dev@gmail.com" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Support</p>
+          <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">Email: <a href="mailto:sanjayvaishya.dev@gmail.com" class="font-medium text-slate-900 dark:text-white">sanjayvaishya.dev@gmail.com</a></p>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Mobile: <a href="tel:+919203251821" class="font-medium text-slate-900 dark:text-white">+91 9203251821</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <div id="cookieBanner" class="fixed bottom-5 left-4 right-4 max-w-4xl mx-auto rounded-3xl border border-slate-200/80 bg-white/95 shadow-2xl p-5 backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-950/95 hidden">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
+        <span class="text-lg">🍪</span>
+        <span>We use cookies to improve your experience.</span>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-end">
+        <a href="cookies.html" class="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Read Policy</a>
+        <button id="declineCookies" class="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Decline</button>
+        <button id="acceptCookies" class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700">Accept All</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const initTheme = () => {
+      try { const savedTheme = localStorage.getItem('theme'); const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark); document.documentElement.classList.toggle('dark', isDark); } catch (e) {}
+    };
+    const initCookieConsent = () => { try { const consent = localStorage.getItem('cookie_consent'); const modal = document.getElementById('cookieModal'); if (!consent && modal) modal.classList.add('show-modal'); } catch (e) {} };
+    const setCookieConsent = (value) => { try { localStorage.setItem('cookie_consent', value); } catch (e) {} const modal = document.getElementById('cookieModal'); if (modal) modal.classList.remove('show-modal'); };
+    document.addEventListener('DOMContentLoaded', () => { initTheme(); initCookieConsent(); const acceptBtn = document.getElementById('acceptCookies'); const declineBtn = document.getElementById('declineCookies'); const acceptModalBtn = document.getElementById('cookieAcceptModal'); const rejectModalBtn = document.getElementById('cookieReject'); if (acceptBtn) acceptBtn.addEventListener('click', () => setCookieConsent('accepted')); if (declineBtn) declineBtn.addEventListener('click', () => setCookieConsent('declined')); if (acceptModalBtn) acceptModalBtn.addEventListener('click', () => setCookieConsent('accepted')); if (rejectModalBtn) rejectModalBtn.addEventListener('click', () => setCookieConsent('declined')); });
+  </script>
+</body>
+</html>
+

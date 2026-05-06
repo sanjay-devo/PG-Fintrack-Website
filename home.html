@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PG Fintrack | Smart Group Expense Sharing</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Track shared expenses with your PG group members and split bills equally with PG Fintrack.">
+  <meta name="keywords" content="PG expense sharing, roommate expense tracker, shared expense app, PG group expenses">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta property="og:title" content="PG Fintrack – Smart Group Expense Sharing">
+  <meta property="og:description" content="Manage shared expenses with your roommates instantly">
+  <meta property="og:image" content="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <meta property="og:type" content="website">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { min-height: 100vh; background: #f8fafc; color-scheme: light dark; }
+    .dark body { background: #070a14; }
+    .glass-card { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px); border: 1px solid rgba(148, 163, 184, 0.24); box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); }
+    .dark .glass-card { background: rgba(15, 23, 42, 0.88); border-color: rgba(71, 85, 105, 0.6); }
+    .button-soft { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .button-soft:active { transform: scale(0.98); }
+    #cookieModal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+    #cookieModal.show-modal { opacity: 1; visibility: visible; }
+    #cookieModal .modal-card { width: min(100%, 460px); }
+  </style>
+</head>
+<body class="font-sans text-slate-900 dark:text-slate-100">
+  <div id="cookieModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 transition-opacity duration-300">
+    <div class="modal-card glass-card rounded-[28px] border border-slate-200/80 bg-white/95 shadow-2xl p-6 backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-950/95">
+      <div class="text-center mb-4">
+        <div class="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">🍪</span>
+        </div>
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Cookie consent</h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">We use cookies to remember your preferences and improve your experience on PG Fintrack.</p>
+      </div>
+      <div class="flex gap-3 flex-col sm:flex-row">
+        <button id="cookieRejectHome" class="w-full px-4 py-3 rounded-2xl border border-slate-300 bg-slate-100 text-slate-900 hover:bg-slate-200 transition dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">Reject</button>
+        <button id="cookieAcceptHome" class="w-full px-4 py-3 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700 transition">Accept</button>
+      </div>
+    </div>
+  </div>
+  <div class="w-full lg:max-w-[1200px] bg-gray-50 dark:bg-gray-900 min-h-[100dvh] sm:rounded-[2.5rem] sm:shadow-2xl overflow-hidden relative flex flex-col mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-lg">₹</div>
+          <h1 class="text-lg font-bold text-slate-900 dark:text-white">PG Fintrack</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <svg id="sunIcon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.536l1.414 1.414a1 1 0 001.414-1.414l-1.414-1.414a1 1 0 00-1.414 1.414zm2.828-2.828l1.414-1.414a1 1 0 00-1.414-1.414l-1.414 1.414a1 1 0 001.414 1.414zM13 11a1 1 0 110 2h-2a1 1 0 110-2h2zm1.464-1.464a1 1 0 001.414-1.414l-1.414-1.414a1 1 0 10-1.414 1.414l1.414 1.414z" clip-rule="evenodd" /></svg>
+            <svg id="moonIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          </button>
+          <a href="index.html" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Get Started</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-y-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto space-y-12">
+        <!-- Hero Section -->
+        <div class="text-center space-y-6">
+          <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white">
+            Smart Group Expense Sharing
+          </h2>
+          <p class="text-lg text-slate-600 dark:text-slate-400">
+            Split bills equally with your roommates, track shared expenses, and settle up instantly
+          </p>
+          <div class="flex gap-4 justify-center">
+            <a href="index.html" class="px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Start Now</a>
+            <a href="about.html" class="px-8 py-3 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-semibold rounded-xl hover:bg-slate-300 dark:hover:bg-slate-600 transition button-soft">Learn More</a>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-4xl mb-4">👥</div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Group Management</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Create and manage multiple groups with your roommates</p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-4xl mb-4">💰</div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Easy Expense Tracking</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Add expenses and see real-time balance updates</p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-4xl mb-4">✨</div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Smart Settlement</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Automatic expense splitting and settlement calculation</p>
+          </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="glass-card rounded-2xl p-8 space-y-6">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white text-center">How It Works</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold mx-auto mb-3">1</div>
+              <p class="font-semibold text-slate-900 dark:text-white mb-1">Create Account</p>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Register with your email or mobile</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold mx-auto mb-3">2</div>
+              <p class="font-semibold text-slate-900 dark:text-white mb-1">Create/Join Group</p>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Form a group with at least 2 members</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold mx-auto mb-3">3</div>
+              <p class="font-semibold text-slate-900 dark:text-white mb-1">Add Expenses</p>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Log shared expenses as you go</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold mx-auto mb-3">4</div>
+              <p class="font-semibold text-slate-900 dark:text-white mb-1">Settle Up</p>
+              <p class="text-sm text-slate-600 dark:text-slate-400">See who owes whom instantly</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="glass-card rounded-2xl p-12 text-center space-y-6">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Ready to split expenses smartly?</h3>
+          <p class="text-slate-600 dark:text-slate-400">Join thousands of groups managing expenses with PG Fintrack</p>
+          <a href="index.html" class="inline-block px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition button-soft">Get Started Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 page-footer border-t border-slate-200/50 dark:border-slate-700/50 py-6 px-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-600 dark:text-slate-400">
+        <p>&copy; 2026 PG Fintrack. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="about.html" class="hover:text-slate-900 dark:hover:text-white transition">About</a>
+          <a href="privacy.html" class="hover:text-slate-900 dark:hover:text-white transition">Privacy</a>
+          <a href="terms.html" class="hover:text-slate-900 dark:hover:text-white transition">Terms</a>
+          <a href="cookies.html" class="hover:text-slate-900 dark:hover:text-white transition">Cookies</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Initialize theme
+    const initTheme = () => {
+      const isDark = localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) document.documentElement.classList.add('dark');
+    };
+    initTheme();
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      const isDarkNow = document.documentElement.classList.contains('dark');
+      document.getElementById('sunIcon').classList.toggle('hidden', !isDarkNow);
+      document.getElementById('moonIcon').classList.toggle('hidden', isDarkNow);
+    });
+
+    // Update theme icon
+    const updateThemeIcon = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.getElementById('sunIcon').classList.toggle('hidden', !isDark);
+      document.getElementById('moonIcon').classList.toggle('hidden', isDark);
+    };
+    updateThemeIcon();
+
+    // Cookie consent modal for new users
+    const initCookieModal = () => {
+      const consent = localStorage.getItem('cookie_consent');
+      const modal = document.getElementById('cookieModal');
+      if (!consent && modal) {
+        modal.classList.add('show-modal');
+        modal.classList.remove('hidden');
+      }
+    };
+
+    const setCookieConsentHome = (value) => {
+      try { localStorage.setItem('cookie_consent', value); } catch (e) {}
+      const modal = document.getElementById('cookieModal');
+      if (modal) modal.classList.remove('show-modal');
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initCookieModal();
+      const acceptHome = document.getElementById('cookieAcceptHome');
+      const rejectHome = document.getElementById('cookieRejectHome');
+      if (acceptHome) acceptHome.addEventListener('click', () => setCookieConsentHome('accepted'));
+      if (rejectHome) rejectHome.addEventListener('click', () => setCookieConsentHome('declined'));
+    });
+  </script>
+</body>
+</html>
+
+

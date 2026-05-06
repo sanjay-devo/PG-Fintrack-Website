@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Request Account Deletion | PG Fintrack</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Request account deletion and contact PG Fintrack support for data removal.">
+  <meta name="keywords" content="PG Fintrack delete account, account removal, data deletion">
+  <meta name="author" content="PG Fintrack">
+  <link rel="icon" type="image/jpeg" href="https://indiacybercafe.com/wp-content/uploads/2026/04/Fintech_logo_design.jpeg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          boxShadow: { soft: '0 18px 55px rgba(15, 23, 42, 0.1)' }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { min-height: 100vh; background: #f8fafc; color-scheme: light dark; }
+    .dark body { background: #070a14; }
+    .glass-card { background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); border: 1px solid rgba(148,163,184,0.24); box-shadow: 0 18px 45px rgba(15,23,42,0.08); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .glass-card:hover { transform: translateY(-1px); box-shadow: 0 22px 55px rgba(15,23,42,0.1); }
+    .dark .glass-card { background: rgba(15,23,42,0.88); border-color: rgba(71,85,105,0.6); box-shadow: 0 18px 45px rgba(0,0,0,0.32); }
+    .section-title { letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; color: #4338ca; }
+    .section-body { max-width: 44rem; margin-top: 0.75rem; color: #475569; }
+    .dark .section-body { color: #cbd5e1; }
+    .button-soft { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .button-soft:active { transform: scale(0.98); }
+    #cookieBanner { transform: translateY(18px); opacity: 0; transition: transform 0.28s ease, opacity 0.28s ease; }
+    #cookieBanner.show-banner { transform: translateY(0); opacity: 1; }
+    .page-footer a { transition: color 0.2s ease; }
+  </style>
+</head>
+<body class="font-sans text-slate-900 dark:text-slate-100">
+  <div class="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-10 space-y-4">
+        <a href="settings.html" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">← Back to settings</a>
+        <p class="section-title">Account deletion</p>
+        <h1 class="text-3xl sm:text-4xl font-semibold text-slate-950 dark:text-white">Request Account Deletion</h1>
+        <p class="section-body">If you want to delete your PG Fintrack account and data, contact us using the details below. We will process your request as quickly as possible.</p>
+      </header>
+
+      <div class="glass-card rounded-[32px] border border-white/70 dark:border-slate-700/70 p-8 shadow-soft space-y-8">
+        <section class="space-y-6">
+          <div class="rounded-3xl bg-slate-50 dark:bg-slate-900/80 p-5 border border-slate-200/70 dark:border-slate-700/70">
+            <p class="text-sm uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Support</p>
+            <div class="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-200">
+              <p class="font-semibold text-slate-950 dark:text-white">📧 Email Support</p>
+              <p><a href="mailto:sanjayvaishya.dev@gmail.com" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">sanjayvaishya.dev@gmail.com</a></p>
+            </div>
+            <div class="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-200">
+              <p class="font-semibold text-slate-950 dark:text-white">📱 Mobile Support</p>
+              <p><a href="tel:+919203251821" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">+91 9203251821</a></p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <label for="deletionReason" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Reason (optional)</label>
+            <textarea id="deletionReason" rows="4" class="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:ring-indigo-900/30" placeholder="Tell us why you are leaving..."></textarea>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <button id="emailRequestButton" type="button" class="button-soft inline-flex items-center justify-center rounded-3xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Send Email Request</button>
+            <a href="tel:+919203251821" class="button-soft inline-flex items-center justify-center rounded-3xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">Call Support</a>
+          </div>
+        </section>
+      </div>
+
+      <footer class="mt-12 page-footer">
+        <div class="glass-card rounded-[28px] border border-white/70 dark:border-slate-700/70 p-6 shadow-soft">
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <p class="text-sm uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Quick links</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <a href="about.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">About</a>
+                <a href="privacy.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Privacy</a>
+                <a href="cookies.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Cookies</a>
+                <a href="terms.html" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Terms</a>
+                <a href="mailto:sanjayvaishya.dev@gmail.com" class="text-sm font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300">Contact</a>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Support</p>
+              <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">Email: <a href="mailto:sanjayvaishya.dev@gmail.com" class="font-medium text-slate-900 dark:text-white">sanjayvaishya.dev@gmail.com</a></p>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Mobile: <a href="tel:+919203251821" class="font-medium text-slate-900 dark:text-white">+91 9203251821</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <div id="cookieBanner" class="fixed bottom-5 left-4 right-4 max-w-4xl mx-auto rounded-3xl border border-slate-200/80 bg-white/95 shadow-2xl p-5 backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-950/95 hidden">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
+        <span class="text-lg">🍪</span>
+        <span>We use cookies to improve your experience.</span>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-end">
+        <a href="cookies.html" class="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Read Policy</a>
+        <button id="declineCookies" class="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Decline</button>
+        <button id="acceptCookies" class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const COOKIE_CONSENT_KEY = 'cookie_consent';
+
+    const initTheme = () => {
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) {}
+    };
+
+    const initCookieConsent = () => {
+      try {
+        const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
+        const banner = document.getElementById('cookieBanner');
+        if (!consent && banner) {
+          banner.classList.remove('hidden');
+          requestAnimationFrame(() => banner.classList.add('show-banner'));
+        }
+      } catch (e) {}
+    };
+
+    const setCookieConsent = (value) => {
+      try { localStorage.setItem(COOKIE_CONSENT_KEY, value); } catch (e) {}
+      const banner = document.getElementById('cookieBanner');
+      if (banner) {
+        banner.classList.remove('show-banner');
+        setTimeout(() => banner.classList.add('hidden'), 300);
+      }
+    };
+
+    const openDeletionEmail = () => {
+      const reason = document.getElementById('deletionReason')?.value.trim();
+      const subject = encodeURIComponent('Delete My Account');
+      const body = reason ? `&body=${encodeURIComponent(`Reason: ${reason}`)}` : '';
+      window.location.href = `mailto:sanjayvaishya.dev@gmail.com?subject=${subject}${body}`;
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initCookieConsent();
+      const acceptBtn = document.getElementById('acceptCookies');
+      const declineBtn = document.getElementById('declineCookies');
+      const emailRequestButton = document.getElementById('emailRequestButton');
+      if (acceptBtn) acceptBtn.addEventListener('click', () => setCookieConsent('accepted'));
+      if (declineBtn) declineBtn.addEventListener('click', () => setCookieConsent('declined'));
+      if (emailRequestButton) emailRequestButton.addEventListener('click', openDeletionEmail);
+    });
+  </script>
+</body>
+</html>
+
